@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="GeneralPrograms" default="all"  basedir=".">
+	<property name="GeneralPrograms" value="GeneralPrograms" />
+	<property name="GeneralPrograms.jar.name" value="${GeneralPrograms}.jar" />
+	
+	<property name="GeneralPrograms.src.dir" value="${basedir}/src" />
+	<property name="GeneralPrograms.build.dir" value="${basedir}/build" />
+	<property name="GeneralPrograms.build.src.dir" value="${GeneralPrograms.build.dir}/src" />
+	<property name="GeneralPrograms.build.classes.dir" value="${GeneralPrograms.build.dir}/classes" />
+	
+	<target name="all" depends="clean,build-project" />
+
+	<!-- all build.xml files need a "clean" target -->
+	<target name="clean">
+		<echo	message="Start -  clean for ${GeneralPrograms}" />
+		<delete dir="${GeneralPrograms.build.dir}" />
+		<echo	message="Complete - clean for ${GeneralPrograms}" />
+    </target>
+	
+	<target name="build-project">
+		<echo	message="Start -  build-project for ${GeneralPrograms}" />
+		<mkdir dir="${GeneralPrograms.build.dir}"/>
+		<mkdir dir="${GeneralPrograms.build.src.dir}"/>
+		<mkdir dir="${GeneralPrograms.build.classes.dir}"/>
+		
+		<echo>java.ant.version: ${ant.java.version}  java.version: ${java.version}  java.home: ${java.home}</echo>
+		<javac source="1.7"
+               destdir="${GeneralPrograms.build.classes.dir}"
+               debug="true"
+               optimize="false"
+               fork="true">
+            <src refid="src.path"/>
+            <classpath refid="build.classpath"/>
+        </javac>
+		
+		
+		<jar destfile="${GeneralPrograms.build.dir}/${GeneralPrograms.jar.name}">
+            <fileset dir="${GeneralPrograms.build.classes.dir}"/>
+        </jar>
+
+		<tstamp>
+			<format property="current.timestamp" pattern="MMM-dd-yyyy HH:mm:ss:sss zzz" />
+		</tstamp>
+		<echo	message="Complete - build-project for ${GeneralPrograms} and timestamp is ${current.timestamp}" />
+    </target>
+	
+	
+	<path id="src.path">
+        <pathelement location="${GeneralPrograms.src.dir}"/>
+        <pathelement location="${GeneralPrograms.build.src.dir}"/>
+    </path>
+	
+	<path id="build.classpath">
+        <fileset dir="${basedir}">
+            <include name="lib/*.jar"/>
+        </fileset>
+        <fileset dir="${basedir}">
+            <include name="no-distrib-lib/*.jar"/>
+        </fileset>
+    </path>
+</project>
